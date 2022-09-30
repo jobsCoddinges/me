@@ -1,20 +1,29 @@
 import { useRef, useState } from "react";
 import "./App.scss";
 import styled from "styled-components";
-import { AnimatePresence, motion } from "framer-motion";
+import {
+  AnimatePresence,
+  motion,
+  useTransform,
+  useViewportScroll,
+} from "framer-motion";
 import blue from "./img/blue.png";
 import Intro from "./components/Intro";
 import green from "./img/green2.png";
 import me from "./img/me.png";
 import ReactAudioPlayer from "react-audio-player";
-const calm = require("./static/calm.mp3");
+import missing from "./img/sen.png";
+import TypeIt from "typeit-react";
+import { useEffect } from "react";
+
+const calm = require("./static/calm2.mp3");
 
 const Wrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100vw;
-  height: 100vh;
+
   background-image: url(${blue});
   background-position: center center;
   background-size: cover;
@@ -38,7 +47,7 @@ const RealWrapper = styled(motion.div)`
   max-width: 414px;
   margin: 0 auto;
   background-color: white;
-  height: 100vh;
+  height: 500vh;
   margin-top: 10px;
   border-radius: 30px;
   overflow: hidden;
@@ -101,6 +110,28 @@ const MyDescription = styled(motion.p)`
   margin-top: 20px;
 `;
 
+const JapaneseAnimationWrapper = styled(motion.div)`
+  padding: 15px;
+`;
+const MyBestAnimation = styled(motion.div)`
+  overflow: hidden;
+`;
+const AnimationImg = styled(motion.div)`
+  background-image: url(${missing});
+  width: 100%;
+  height: 200px;
+  background-position: center center;
+  background-size: cover;
+  border-radius: 20px;
+`;
+
+const MyFavortieAnimationText = styled(motion.p)`
+  font-family: "Dancing Script", cursive;
+  font-size: 33px;
+  margin-top: 80px;
+  display: flex;
+  justify-content: center;
+`;
 const AudioPlayBtn = styled(motion.button)`
   margin-left: 30px;
   margin-top: 30px;
@@ -109,6 +140,18 @@ const AudioPlayBtn = styled(motion.button)`
   border: none;
   cursor: pointer;
   background-color: transparent;
+`;
+const AnimationTitle = styled(motion.h2)`
+  padding: 20px;
+  font-family: "Dancing Script", cursive;
+  font-size: 30px;
+  display: flex;
+  justify-content: center;
+`;
+const AnimationDescription = styled(motion.p)`
+  font-family: "Reem Kufi Fun", sans-serif;
+  font-size: 13px;
+  line-height: 30px;
 `;
 const pathVariants = {
   hidden: {
@@ -137,9 +180,15 @@ function App() {
   const [visible, setVisible] = useState(true);
   const [visibleTwo, setVisibleTwo] = useState(false);
   const [visibleThree, setVisibleThree] = useState(true);
+  const [sentype, setSentype] = useState(false);
   const Refs = useRef<SVGPathElement>(null);
   const Ref2 = useRef<SVGPathElement>(null);
   const audio = document.querySelector("audio");
+  const { scrollY } = useViewportScroll();
+  const scale = useTransform(scrollY, [10, 460], [0, 1]);
+
+  useEffect(() => scale.onChange(() => console.log(scale.get())), [scale]);
+
   const changeDetect = setInterval(() => {
     const value = Refs.current?.attributes[3].value;
     if (value === "rgba(255,255,255,0)") return;
@@ -401,6 +450,34 @@ function App() {
                   </span>
                 </MyIconWrapper>
               </a>
+              <MyFavortieAnimationText>
+                My Favorite Animation
+              </MyFavortieAnimationText>
+              <JapaneseAnimationWrapper>
+                <AnimatePresence>
+                  <MyBestAnimation style={{ scale: scale, opacity: scale }}>
+                    <AnimationImg></AnimationImg>
+                    {scale.get() > 0.8 ? (
+                      <TypeIt
+                        options={{
+                          speed: 20,
+                        }}
+                      >
+                        <AnimationTitle>센과 치히로의 행방불명</AnimationTitle>
+                        <AnimationDescription>
+                          어떻게 보면 제가 애니메이션을 좋아하게 만든 만화일
+                          수도 있습니다. 저는 항상 비현실적인 것들을 꿈꿔 오면서
+                          자기전에 그 꿈들을 상상하곤 합니다. 그런데 센과
+                          치히로의 행방불명은 저에게는 큰 충격이였고 이때의
+                          지브리 음악들은 저의 가슴을 항상 뛰게 만들어 줍니다.
+                        </AnimationDescription>
+                      </TypeIt>
+                    ) : (
+                      <></>
+                    )}
+                  </MyBestAnimation>
+                </AnimatePresence>
+              </JapaneseAnimationWrapper>
             </RealWrapper>
           </>
         )}
