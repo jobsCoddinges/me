@@ -1,9 +1,9 @@
 @import url("https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap");
-
+@import url("https://fonts.googleapis.com/css2?family=Reem+Kufi+Fun&display=swap");
 .App {
-  //   background-image: url("./img/blue.png");
+  background-image: url("./img/blue.png");
   width: 100vw;
-  height: 100vh;
+
   background-size: cover;
   background-position: center center;
 }
@@ -18,4 +18,9 @@ a {
 
 a:link {
   color: black;
+}
+
+audio::-webkit-media-controls-play-button,
+audio::-webkit-media-controls-panel {
+  background-color: transparent;
 }
