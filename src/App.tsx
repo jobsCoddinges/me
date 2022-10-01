@@ -17,6 +17,7 @@ import TypeIt from "typeit-react";
 import { useEffect } from "react";
 import pin from "./img/pin2.png";
 import times from "./img/times.png";
+import name from "./img/name.png";
 const calm = require("./static/calm2.mp3");
 
 const Wrapper = styled.div`
@@ -117,8 +118,8 @@ const JapaneseAnimationWrapper = styled(motion.div)`
 const MyBestAnimation = styled(motion.div)`
   overflow: hidden;
 
-  height: 450px;
-  margin-bottom: 100px;
+  height: 500px;
+  margin-bottom: 10px;
 `;
 const AnimationImg = styled(motion.div)`
   background-image: url(${missing});
@@ -194,6 +195,7 @@ function App() {
   const { scrollY } = useViewportScroll();
   const senScale = useTransform(scrollY, [10, 460], [0, 1]);
   const timeScale = useTransform(scrollY, [500, 1100], [0, 1]);
+  const nameScale = useTransform(scrollY, [1444, 1800], [0, 1]);
   const colors = useTransform(
     scrollY,
     [500, 600],
@@ -205,8 +207,8 @@ function App() {
     ["rgba(0,0,0,0)", "rgb(0, 0, 0, 0.85)"]
   );
   useEffect(
-    () => timeScale.onChange(() => console.log(timeScale.get())),
-    [timeScale]
+    () => scrollY.onChange(() => console.log(scrollY.get())),
+    [scrollY]
   );
 
   const changeDetect = setInterval(() => {
@@ -228,7 +230,7 @@ function App() {
 
   return (
     <main>
-      {!visibleThree && (
+      {false && (
         <Wrapper>
           <AnimatePresence onExitComplete={() => setVisibleTwo(true)}>
             {visible && (
@@ -289,7 +291,7 @@ function App() {
         </Wrapper>
       )}
       <AnimatePresence>
-        {visibleThree && (
+        {true && (
           <>
             <RealWrapper
               initial={{ opacity: 0 }}
@@ -492,7 +494,11 @@ function App() {
                   </MyBestAnimation>
                   <MyBestAnimation
                     key={2}
-                    style={{ scale: timeScale, opacity: timeScale }}
+                    style={{
+                      scale: timeScale,
+                      opacity: timeScale,
+                      marginBottom: "200px",
+                    }}
                   >
                     <AnimationImg
                       style={{ backgroundImage: `url(${times})` }}
@@ -500,11 +506,48 @@ function App() {
 
                     <AnimationTitle>시간을 달리는 소녀</AnimationTitle>
                     <AnimationDescription>
-                      어떻게 보면 제가 애니메이션을 좋아하게 만든 만화일 수도
-                      있습니다. 저는 항상 비현실적인 것들을 꿈꿔 오면서 자기전에
-                      그 꿈들을 상상하곤 합니다. 그런데 센과 치히로의 행방불명은
-                      저에게는 큰 충격이였고 이때의 지브리 음악들은 저의 가슴을
-                      항상 뛰게 만들어 줍니다.
+                      강가에서 주인공 둘이 마지막으로 대화를 나누는 장면이 정말
+                      명장면입니다. 애니메이션을 별로 좋아하지 않는 분들도
+                      아시지 않을까 하는 애니메이션입니다. 마지막에 명대사를
+                      듣고 가슴이 뛰었던 기억이 납니다.{" "}
+                      <p
+                        style={{
+                          display: "flex",
+                          justifyContent: "center",
+                          margin: "30px",
+                          fontSize: "30px",
+                          fontWeight: "bold",
+                        }}
+                      >
+                        {" "}
+                        "미래에서 기다릴게."{" "}
+                      </p>{" "}
+                      제 자신에게 정말 오그라듭니다.
+                    </AnimationDescription>
+                  </MyBestAnimation>
+                  <MyBestAnimation
+                    key={3}
+                    style={{
+                      scale: nameScale,
+                      opacity: nameScale,
+                      height: "530px",
+                    }}
+                  >
+                    <AnimationImg
+                      style={{
+                        backgroundImage: `url(${name})`,
+                        height: "300px",
+                      }}
+                    ></AnimationImg>
+
+                    <AnimationTitle>너의 이름은</AnimationTitle>
+                    <AnimationDescription>
+                      영화관에서 보았던 기억이 납니다. 여자친구도 같이 정말
+                      재밌게 봤으면서 본인은 애니에 빠지지 않았습니다. 저는 애니
+                      덕후가 되어버렸고 너의 이름을 보고 나서 친구들에게 매일
+                      키미노 나마에와를 외쳐먼서 다니게 되었습니다. 저의
+                      덕후력을 강하게 만들어준 영화입니다. 미즈하테마의 ost는
+                      지금도 듣고있습니다!
                     </AnimationDescription>
                   </MyBestAnimation>
                 </AnimatePresence>
