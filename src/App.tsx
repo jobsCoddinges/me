@@ -15,7 +15,8 @@ import ReactAudioPlayer from "react-audio-player";
 import missing from "./img/sen.png";
 import TypeIt from "typeit-react";
 import { useEffect } from "react";
-
+import pin from "./img/pin2.png";
+import times from "./img/times.png";
 const calm = require("./static/calm2.mp3");
 
 const Wrapper = styled.div`
@@ -23,7 +24,7 @@ const Wrapper = styled.div`
   justify-content: center;
   align-items: center;
   width: 100vw;
-
+  height: 100vh;
   background-image: url(${blue});
   background-position: center center;
   background-size: cover;
@@ -115,6 +116,9 @@ const JapaneseAnimationWrapper = styled(motion.div)`
 `;
 const MyBestAnimation = styled(motion.div)`
   overflow: hidden;
+
+  height: 450px;
+  margin-bottom: 100px;
 `;
 const AnimationImg = styled(motion.div)`
   background-image: url(${missing});
@@ -142,6 +146,7 @@ const AudioPlayBtn = styled(motion.button)`
   background-color: transparent;
 `;
 const AnimationTitle = styled(motion.h2)`
+  color: white;
   padding: 20px;
   font-family: "Dancing Script", cursive;
   font-size: 30px;
@@ -149,10 +154,12 @@ const AnimationTitle = styled(motion.h2)`
   justify-content: center;
 `;
 const AnimationDescription = styled(motion.p)`
+  color: white;
   font-family: "Reem Kufi Fun", sans-serif;
   font-size: 13px;
   line-height: 30px;
 `;
+
 const pathVariants = {
   hidden: {
     fill: "rgba(255,255,255,0)",
@@ -179,15 +186,28 @@ const pathVariants = {
 function App() {
   const [visible, setVisible] = useState(true);
   const [visibleTwo, setVisibleTwo] = useState(false);
-  const [visibleThree, setVisibleThree] = useState(true);
+  const [visibleThree, setVisibleThree] = useState(false);
   const [sentype, setSentype] = useState(false);
   const Refs = useRef<SVGPathElement>(null);
   const Ref2 = useRef<SVGPathElement>(null);
   const audio = document.querySelector("audio");
   const { scrollY } = useViewportScroll();
-  const scale = useTransform(scrollY, [10, 460], [0, 1]);
-
-  useEffect(() => scale.onChange(() => console.log(scale.get())), [scale]);
+  const senScale = useTransform(scrollY, [10, 460], [0, 1]);
+  const timeScale = useTransform(scrollY, [500, 1100], [0, 1]);
+  const colors = useTransform(
+    scrollY,
+    [500, 600],
+    ["rgba(0,0,0,1)", "rgba(255,255,255,1)"]
+  );
+  const backgroundColor = useTransform(
+    scrollY,
+    [500, 600],
+    ["rgba(0,0,0,0)", "rgb(0, 0, 0, 0.85)"]
+  );
+  useEffect(
+    () => timeScale.onChange(() => console.log(timeScale.get())),
+    [timeScale]
+  );
 
   const changeDetect = setInterval(() => {
     const value = Refs.current?.attributes[3].value;
@@ -208,7 +228,7 @@ function App() {
 
   return (
     <main>
-      {false && (
+      {!visibleThree && (
         <Wrapper>
           <AnimatePresence onExitComplete={() => setVisibleTwo(true)}>
             {visible && (
@@ -275,6 +295,7 @@ function App() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 1 }}
+              style={{ backgroundColor: backgroundColor }}
             >
               <TopBackGround>
                 <AudioPlayBtn
@@ -450,31 +471,41 @@ function App() {
                   </span>
                 </MyIconWrapper>
               </a>
-              <MyFavortieAnimationText>
+              <MyFavortieAnimationText style={{ color: colors }}>
                 My Favorite Animation
               </MyFavortieAnimationText>
               <JapaneseAnimationWrapper>
                 <AnimatePresence>
-                  <MyBestAnimation style={{ scale: scale, opacity: scale }}>
+                  <MyBestAnimation
+                    key={1}
+                    style={{ scale: senScale, opacity: senScale }}
+                  >
                     <AnimationImg></AnimationImg>
-                    {scale.get() > 0.8 ? (
-                      <TypeIt
-                        options={{
-                          speed: 20,
-                        }}
-                      >
-                        <AnimationTitle>센과 치히로의 행방불명</AnimationTitle>
-                        <AnimationDescription>
-                          어떻게 보면 제가 애니메이션을 좋아하게 만든 만화일
-                          수도 있습니다. 저는 항상 비현실적인 것들을 꿈꿔 오면서
-                          자기전에 그 꿈들을 상상하곤 합니다. 그런데 센과
-                          치히로의 행방불명은 저에게는 큰 충격이였고 이때의
-                          지브리 음악들은 저의 가슴을 항상 뛰게 만들어 줍니다.
-                        </AnimationDescription>
-                      </TypeIt>
-                    ) : (
-                      <></>
-                    )}
+                    <AnimationTitle>센과 치히로의 행방불명</AnimationTitle>
+                    <AnimationDescription>
+                      어떻게 보면 제가 애니메이션을 좋아하게 만든 만화일 수도
+                      있습니다. 저는 항상 비현실적인 것들을 꿈꿔 오면서 자기전에
+                      그 꿈들을 상상하곤 합니다. 그런데 센과 치히로의 행방불명은
+                      저에게는 큰 충격이였고 이때의 지브리 음악들은 저의 가슴을
+                      항상 뛰게 만들어 줍니다.
+                    </AnimationDescription>
+                  </MyBestAnimation>
+                  <MyBestAnimation
+                    key={2}
+                    style={{ scale: timeScale, opacity: timeScale }}
+                  >
+                    <AnimationImg
+                      style={{ backgroundImage: `url(${times})` }}
+                    ></AnimationImg>
+
+                    <AnimationTitle>시간을 달리는 소녀</AnimationTitle>
+                    <AnimationDescription>
+                      어떻게 보면 제가 애니메이션을 좋아하게 만든 만화일 수도
+                      있습니다. 저는 항상 비현실적인 것들을 꿈꿔 오면서 자기전에
+                      그 꿈들을 상상하곤 합니다. 그런데 센과 치히로의 행방불명은
+                      저에게는 큰 충격이였고 이때의 지브리 음악들은 저의 가슴을
+                      항상 뛰게 만들어 줍니다.
+                    </AnimationDescription>
                   </MyBestAnimation>
                 </AnimatePresence>
               </JapaneseAnimationWrapper>
