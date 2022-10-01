@@ -230,7 +230,7 @@ function App() {
 
   return (
     <main>
-      {false && (
+      {!visibleThree && (
         <Wrapper>
           <AnimatePresence onExitComplete={() => setVisibleTwo(true)}>
             {visible && (
@@ -291,7 +291,7 @@ function App() {
         </Wrapper>
       )}
       <AnimatePresence>
-        {true && (
+        {visibleThree && (
           <>
             <RealWrapper
               initial={{ opacity: 0 }}
