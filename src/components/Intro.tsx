@@ -30,8 +30,8 @@ interface Iintro {
 
 const Intro = ({ dContent, ...rest }: Iintro) => {
   const Svg = styled(motion.svg)`
-    width: 100px;
-    height: 100px;
+    width: 40px;
+    height: 40px;
   `;
 
   return (

@@ -41,8 +41,8 @@ const TopBackGround = styled.div`
 `;
 
 const Svg = styled(motion.svg)`
-  width: 100px;
-  height: 100px;
+  width: 40px;
+  height: 40px;
 `;
 const SvgWrapper = styled(motion.div)``;
 const RealWrapper = styled(motion.div)`
@@ -154,11 +154,19 @@ const AnimationTitle = styled(motion.h2)`
   display: flex;
   justify-content: center;
 `;
-const AnimationDescription = styled(motion.p)`
+const AnimationDescription = styled(motion.div)`
   color: white;
   font-family: "Reem Kufi Fun", sans-serif;
   font-size: 13px;
   line-height: 30px;
+`;
+
+const StrongP = styled(motion.p)`
+  display: flex;
+  justify-content: center;
+  margin: 30px;
+  font-size: 30px;
+  font-weight: bold;
 `;
 
 const pathVariants = {
@@ -201,10 +209,20 @@ function App() {
     [500, 600],
     ["rgba(0,0,0,1)", "rgba(255,255,255,1)"]
   );
+  const ghpagesColors = useTransform(
+    scrollY,
+    [1600, 2300],
+    ["rgba(255,255,255,1)", "rgba(0,0,0,1)"]
+  );
   const backgroundColor = useTransform(
     scrollY,
-    [500, 600],
-    ["rgba(0,0,0,0)", "rgb(0, 0, 0, 0.85)"]
+    [500, 600, 2300, 2400],
+    [
+      "rgba(0,0,0,0)",
+      "rgb(0, 0, 0, 0.85)",
+      "rgba(0,0,0,0.85)",
+      "rgba(255,255,255,1)",
+    ]
   );
   useEffect(
     () => scrollY.onChange(() => console.log(scrollY.get())),
@@ -230,7 +248,7 @@ function App() {
 
   return (
     <main>
-      {!visibleThree && (
+      {false && (
         <Wrapper>
           <AnimatePresence onExitComplete={() => setVisibleTwo(true)}>
             {visible && (
@@ -291,7 +309,7 @@ function App() {
         </Wrapper>
       )}
       <AnimatePresence>
-        {visibleThree && (
+        {true && (
           <>
             <RealWrapper
               initial={{ opacity: 0 }}
@@ -509,20 +527,9 @@ function App() {
                       강가에서 주인공 둘이 마지막으로 대화를 나누는 장면이 정말
                       명장면입니다. 애니메이션을 별로 좋아하지 않는 분들도
                       아시지 않을까 하는 애니메이션입니다. 마지막에 명대사를
-                      듣고 가슴이 뛰었던 기억이 납니다.{" "}
-                      <p
-                        style={{
-                          display: "flex",
-                          justifyContent: "center",
-                          margin: "30px",
-                          fontSize: "30px",
-                          fontWeight: "bold",
-                        }}
-                      >
-                        {" "}
-                        "미래에서 기다릴게."{" "}
-                      </p>{" "}
-                      제 자신에게 정말 오그라듭니다.
+                      듣고 가슴이 뛰었던 기억이 납니다.
+                      <StrongP>"미래에서 기다릴게."</StrongP>제 자신에게 정말
+                      오그라듭니다.
                     </AnimationDescription>
                   </MyBestAnimation>
                   <MyBestAnimation
@@ -552,6 +559,9 @@ function App() {
                   </MyBestAnimation>
                 </AnimatePresence>
               </JapaneseAnimationWrapper>
+              <MyFavortieAnimationText style={{ color: ghpagesColors }}>
+                My gh-pages
+              </MyFavortieAnimationText>
             </RealWrapper>
           </>
         )}
