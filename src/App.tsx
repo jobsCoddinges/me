@@ -20,6 +20,7 @@ import times from "./img/times.png";
 import name from "./img/name.png";
 import slideimg1 from "./img/slideImg/1.png";
 import slideimg2 from "./img/slideImg/2.png";
+import { faL } from "@fortawesome/free-solid-svg-icons";
 
 const calm = require("./static/calm2.mp3");
 
@@ -183,6 +184,7 @@ const LeftRight = styled(motion.div)`
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 3;
   div {
     display: flex;
     justify-content: center;
@@ -200,18 +202,19 @@ const LeftRight = styled(motion.div)`
 `;
 
 const SlideImg = styled(motion.div)`
+  opacity: 0;
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
-  height: 500px;
+  height: 200px;
 `;
 
 const Image = styled(motion.div)`
   background-position: center center;
   background-size: cover;
-  width: 80%;
-  height: 500px;
+  width: 250px;
+  height: 250px;
   border-radius: 15px;
   box-shadow: 1px 1px 5px black;
 `;
@@ -239,24 +242,32 @@ const pathVariants = {
   },
 };
 
-const randomImges = [slideimg1, slideimg2];
-let randomNumber = 0;
-let randomImg = randomImges[randomNumber];
-
-const numberChange = () => {
-  if (randomNumber === 0) {
-    randomNumber = 1;
-  } else {
-    randomNumber = 0;
-  }
-  randomImg = randomImges[randomNumber];
+const slideShow = {
+  hidden: (rightSlide: boolean) => ({
+    x: rightSlide ? -window.innerWidth : window.innerWidth,
+  }),
+  visible: {
+    x: 0,
+  },
+  exit: (rightSlide: boolean) => ({
+    x: rightSlide ? window.innerWidth : -window.innerWidth,
+  }),
 };
 
 function App() {
   const [visible, setVisible] = useState(true);
   const [visibleTwo, setVisibleTwo] = useState(false);
   const [visibleThree, setVisibleThree] = useState(false);
-  const [sentype, setSentype] = useState(false);
+  const [randomNumber, setRandomNumber] = useState(0);
+  const [slideImges, setSlideImges] = useState([slideimg1, slideimg2]);
+  const randomNumberChange = () => {
+    if (randomNumber === 0) {
+      setRandomNumber(1);
+    } else {
+      setRandomNumber(0);
+    }
+  };
+  const [rightSlide, setRightSlide] = useState(true);
   const Refs = useRef<SVGPathElement>(null);
   const Ref2 = useRef<SVGPathElement>(null);
   const audio = document.querySelector("audio");
@@ -274,6 +285,7 @@ function App() {
     [1600, 2300],
     ["rgba(255,255,255,1)", "rgba(0,0,0,1)"]
   );
+  const slideOpacity = useTransform(scrollY, [1600, 2300], [0, 1]);
   const backgroundColor = useTransform(
     scrollY,
     [500, 600, 2300, 2400],
@@ -625,7 +637,10 @@ function App() {
               <AnimatePresence>
                 <SlideImges>
                   <LeftRight
-                    onClick={numberChange}
+                    onClick={() => {
+                      randomNumberChange();
+                      setRightSlide(false);
+                    }}
                     style={{ color: ghpagesColors }}
                   >
                     <div>
@@ -645,14 +660,30 @@ function App() {
                       </svg>
                     </div>
                   </LeftRight>
-                  <SlideImg>
-                    <AnimatePresence>
+                  <SlideImg style={{ opacity: slideOpacity }}>
+                    <AnimatePresence custom={rightSlide}>
                       <Image
-                        style={{ backgroundImage: `url(${randomImg})` }}
+                        variants={slideShow}
+                        initial="hidden"
+                        animate="visible"
+                        exit="exit"
+                        transition={{ duration: 0.5 }}
+                        key={randomNumber}
+                        style={{
+                          backgroundImage: `url(${slideImges[randomNumber]})`,
+                          position: "absolute",
+                          zIndex: "2",
+                        }}
                       ></Image>
                     </AnimatePresence>
                   </SlideImg>
-                  <LeftRight style={{ color: ghpagesColors }}>
+                  <LeftRight
+                    onClick={() => {
+                      randomNumberChange();
+                      setRightSlide(true);
+                    }}
+                    style={{ color: ghpagesColors }}
+                  >
                     <div>
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
