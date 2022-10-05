@@ -18,6 +18,9 @@ import { useEffect } from "react";
 import pin from "./img/pin2.png";
 import times from "./img/times.png";
 import name from "./img/name.png";
+import slideimg1 from "./img/slideImg/1.png";
+import slideimg2 from "./img/slideImg/2.png";
+
 const calm = require("./static/calm2.mp3");
 
 const Wrapper = styled.div`
@@ -169,6 +172,50 @@ const StrongP = styled(motion.p)`
   font-weight: bold;
 `;
 
+const SlideImges = styled(motion.div)`
+  display: grid;
+  grid-template-columns: 1fr 8fr 1fr;
+  margin-top: 50px;
+  padding: 0 20px;
+`;
+
+const LeftRight = styled(motion.div)`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: black;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    svg {
+      width: 30px;
+      height: 30px;
+      stroke: white;
+    }
+  }
+`;
+
+const SlideImg = styled(motion.div)`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 500px;
+`;
+
+const Image = styled(motion.div)`
+  background-position: center center;
+  background-size: cover;
+  width: 80%;
+  height: 500px;
+  border-radius: 15px;
+  box-shadow: 1px 1px 5px black;
+`;
+
 const pathVariants = {
   hidden: {
     fill: "rgba(255,255,255,0)",
@@ -190,6 +237,19 @@ const pathVariants = {
       fill: { duration: 0.5, delay: 1 },
     },
   },
+};
+
+const randomImges = [slideimg1, slideimg2];
+let randomNumber = 0;
+let randomImg = randomImges[randomNumber];
+
+const numberChange = () => {
+  if (randomNumber === 0) {
+    randomNumber = 1;
+  } else {
+    randomNumber = 0;
+  }
+  randomImg = randomImges[randomNumber];
 };
 
 function App() {
@@ -562,6 +622,56 @@ function App() {
               <MyFavortieAnimationText style={{ color: ghpagesColors }}>
                 My gh-pages
               </MyFavortieAnimationText>
+              <AnimatePresence>
+                <SlideImges>
+                  <LeftRight
+                    onClick={numberChange}
+                    style={{ color: ghpagesColors }}
+                  >
+                    <div>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.5}
+                        stroke="currentColor"
+                        className="w-6 h-6"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"
+                        />
+                      </svg>
+                    </div>
+                  </LeftRight>
+                  <SlideImg>
+                    <AnimatePresence>
+                      <Image
+                        style={{ backgroundImage: `url(${randomImg})` }}
+                      ></Image>
+                    </AnimatePresence>
+                  </SlideImg>
+                  <LeftRight style={{ color: ghpagesColors }}>
+                    <div>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.5}
+                        stroke="currentColor"
+                        className="w-6 h-6"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
+                        />
+                      </svg>
+                    </div>
+                  </LeftRight>
+                </SlideImges>
+              </AnimatePresence>
             </RealWrapper>
           </>
         )}
