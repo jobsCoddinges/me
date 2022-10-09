@@ -13,14 +13,13 @@ import green from "./img/green2.png";
 import me from "./img/me.png";
 import ReactAudioPlayer from "react-audio-player";
 import missing from "./img/sen.png";
-import TypeIt from "typeit-react";
+
 import { useEffect } from "react";
-import pin from "./img/pin2.png";
+
 import times from "./img/times.png";
 import name from "./img/name.png";
 import slideimg1 from "./img/slideImg/1.png";
 import slideimg2 from "./img/slideImg/2.png";
-import { faL } from "@fortawesome/free-solid-svg-icons";
 
 const calm = require("./static/calm2.mp3");
 
@@ -57,6 +56,7 @@ const RealWrapper = styled(motion.div)`
   margin-top: 10px;
   border-radius: 30px;
   overflow: hidden;
+  z-index: 0;
 `;
 const ItsMe = styled(motion.div)`
   position: relative;
@@ -207,7 +207,9 @@ const SlideImg = styled(motion.div)`
   justify-content: center;
   align-items: center;
   width: 100%;
-  height: 200px;
+  height: 250px;
+  overflow: hidden;
+  position: relative;
 `;
 
 const Image = styled(motion.div)`
@@ -217,6 +219,8 @@ const Image = styled(motion.div)`
   height: 250px;
   border-radius: 15px;
   box-shadow: 1px 1px 5px black;
+  position: absolute;
+  margin: 0 auto;
 `;
 
 const pathVariants = {
@@ -260,7 +264,9 @@ function App() {
   const [visibleThree, setVisibleThree] = useState(false);
   const [randomNumber, setRandomNumber] = useState(0);
   const [slideImges, setSlideImges] = useState([slideimg1, slideimg2]);
+  const [slideComplete, setSlideComplete] = useState(true);
   const randomNumberChange = () => {
+    if (!slideComplete) return;
     if (randomNumber === 0) {
       setRandomNumber(1);
     } else {
@@ -317,6 +323,9 @@ function App() {
       clearInterval(changeDetectTwo);
     }
   }, 2000);
+  const slideExitComplete = () => {
+    setSlideComplete(true);
+  };
 
   return (
     <main>
@@ -382,7 +391,10 @@ function App() {
       )}
       <AnimatePresence>
         {true && (
-          <>
+          <div
+            style={{ display: "grid", gridTemplateColumns: "1fr 414px 1fr" }}
+          >
+            <div style={{ zIndex: 2 }}></div>
             <RealWrapper
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -638,8 +650,9 @@ function App() {
                 <SlideImges>
                   <LeftRight
                     onClick={() => {
-                      randomNumberChange();
+                      setSlideComplete(false);
                       setRightSlide(false);
+                      randomNumberChange();
                     }}
                     style={{ color: ghpagesColors }}
                   >
@@ -661,26 +674,31 @@ function App() {
                     </div>
                   </LeftRight>
                   <SlideImg style={{ opacity: slideOpacity }}>
-                    <AnimatePresence custom={rightSlide}>
+                    <AnimatePresence onExitComplete={slideExitComplete}>
                       <Image
-                        variants={slideShow}
-                        initial="hidden"
-                        animate="visible"
-                        exit="exit"
+                        initial={{
+                          x: rightSlide ? -500 : 500,
+                        }}
+                        animate={{
+                          x: 0,
+                        }}
+                        exit={{
+                          x: rightSlide ? 500 : -500,
+                        }}
                         transition={{ duration: 0.5 }}
                         key={randomNumber}
                         style={{
                           backgroundImage: `url(${slideImges[randomNumber]})`,
-                          position: "absolute",
-                          zIndex: "2",
+                          zIndex: 1,
                         }}
                       ></Image>
                     </AnimatePresence>
                   </SlideImg>
                   <LeftRight
                     onClick={() => {
-                      randomNumberChange();
+                      setSlideComplete(false);
                       setRightSlide(true);
+                      randomNumberChange();
                     }}
                     style={{ color: ghpagesColors }}
                   >
@@ -704,7 +722,8 @@ function App() {
                 </SlideImges>
               </AnimatePresence>
             </RealWrapper>
-          </>
+            <div style={{ zIndex: 2, overflow: "hidden" }}></div>
+          </div>
         )}
       </AnimatePresence>
     </main>
