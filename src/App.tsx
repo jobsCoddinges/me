@@ -246,34 +246,34 @@ const pathVariants = {
   },
 };
 
-const slideShow = {
-  hidden: (rightSlide: boolean) => ({
-    x: rightSlide ? -window.innerWidth : window.innerWidth,
-  }),
-  visible: {
-    x: 0,
-  },
-  exit: (rightSlide: boolean) => ({
-    x: rightSlide ? window.innerWidth : -window.innerWidth,
-  }),
-};
-
 function App() {
   const [visible, setVisible] = useState(true);
   const [visibleTwo, setVisibleTwo] = useState(false);
   const [visibleThree, setVisibleThree] = useState(false);
   const [randomNumber, setRandomNumber] = useState(0);
   const [slideImges, setSlideImges] = useState([slideimg1, slideimg2]);
+  const [rightSlide, setRightSlide] = useState<boolean>();
   const [slideComplete, setSlideComplete] = useState(true);
-  const randomNumberChange = () => {
+  const LeftRandomNumberChange = () => {
     if (!slideComplete) return;
+    setRightSlide(false);
     if (randomNumber === 0) {
       setRandomNumber(1);
     } else {
       setRandomNumber(0);
     }
   };
-  const [rightSlide, setRightSlide] = useState(true);
+
+  const rightRandomNumberChange = () => {
+    if (!slideComplete) return;
+    setRightSlide(true);
+    if (randomNumber === 0) {
+      setRandomNumber(1);
+    } else {
+      setRandomNumber(0);
+    }
+  };
+
   const Refs = useRef<SVGPathElement>(null);
   const Ref2 = useRef<SVGPathElement>(null);
   const audio = document.querySelector("audio");
@@ -651,8 +651,7 @@ function App() {
                   <LeftRight
                     onClick={() => {
                       setSlideComplete(false);
-                      setRightSlide(false);
-                      randomNumberChange();
+                      LeftRandomNumberChange();
                     }}
                     style={{ color: ghpagesColors }}
                   >
@@ -676,6 +675,10 @@ function App() {
                   <SlideImg style={{ opacity: slideOpacity }}>
                     <AnimatePresence onExitComplete={slideExitComplete}>
                       <Image
+                        style={{
+                          backgroundImage: `url(${slideImges[randomNumber]})`,
+                        }}
+                        key={randomNumber}
                         initial={{
                           x: rightSlide ? -500 : 500,
                         }}
@@ -686,19 +689,13 @@ function App() {
                           x: rightSlide ? 500 : -500,
                         }}
                         transition={{ duration: 0.5 }}
-                        key={randomNumber}
-                        style={{
-                          backgroundImage: `url(${slideImges[randomNumber]})`,
-                          zIndex: 1,
-                        }}
                       ></Image>
                     </AnimatePresence>
                   </SlideImg>
                   <LeftRight
                     onClick={() => {
                       setSlideComplete(false);
-                      setRightSlide(true);
-                      randomNumberChange();
+                      rightRandomNumberChange();
                     }}
                     style={{ color: ghpagesColors }}
                   >
